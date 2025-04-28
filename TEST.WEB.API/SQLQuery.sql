@@ -1,18 +1,34 @@
---DROP TABLE Products
+-- Create Category table first (because Product depends on it)
+CREATE TABLE Categories (
+    Id INT PRIMARY KEY,
+    Name NVARCHAR(255) NOT NULL
+);
 
+-- Create Product table
 CREATE TABLE Products (
     Id INT PRIMARY KEY,
-    Name NVARCHAR(100) NOT NULL,
-    Price DECIMAL(18, 2) NOT NULL
+    Name NVARCHAR(255) NOT NULL,
+    Price DECIMAL(18,2) NOT NULL,
+    CategoryId INT NOT NULL,
+    CONSTRAINT FK_Products_Categories FOREIGN KEY (CategoryId) REFERENCES Categories(Id) ON DELETE CASCADE
 );
-INSERT INTO Products (Id, Name, Price) VALUES
-(1, 'Wireless Mouse', 49.99),
-(2, 'Mechanical Keyboard', 129.50),
-(3, '27-inch Monitor', 899.00),
-(4, 'USB-C Hub', 35.75),
-(5, 'Laptop Stand', 60.00),
-(6, 'External SSD 1TB', 350.00),
-(7, 'Webcam HD', 120.00),
-(8, 'Noise Cancelling Headphones', 499.99),
-(9, 'Gaming Chair', 850.00),
-(10, 'Smartphone Charger', 39.90);
+
+
+-- Insert Categories with manual Id values
+INSERT INTO Categories (Id, Name) VALUES
+(1, 'Electronics'),
+(2, 'Clothing'),
+(3, 'Home Appliances'),
+(4, 'Books'),
+(5, 'Furniture');
+
+-- Insert Products with manual Id values and corresponding CategoryId
+INSERT INTO Products (Id, Name, Price, CategoryId) VALUES
+(1, 'Smartphone', 799.99, 1),    -- Electronics
+(2, 'Laptop', 1299.99, 1),       -- Electronics
+(3, 'T-Shirt', 19.99, 2),        -- Clothing
+(4, 'Jeans', 39.99, 2),          -- Clothing
+(5, 'Microwave', 149.99, 3),     -- Home Appliances
+(6, 'Washing Machine', 499.99, 3), -- Home Appliances
+(7, 'Novel', 9.99, 4),           -- Books
+(8, 'Sofa', 899.99, 5);          -- Furniture

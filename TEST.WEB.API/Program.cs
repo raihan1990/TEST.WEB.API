@@ -20,5 +20,6 @@ app.UseHttpsRedirection();
 
 // Register endpoints
 app.MapProductEndpoints();
+app.MapCategoryEndpoints();
 
 app.Run();

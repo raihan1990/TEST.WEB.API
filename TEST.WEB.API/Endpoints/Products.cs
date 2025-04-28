@@ -5,21 +5,27 @@ using TEST.WEB.API.Models;
 
 namespace TEST.WEB.API.Endpoints
 {
-    public static class ProductsEndpoints
+    public static class Products
     {
         public static void MapProductEndpoints(this WebApplication app)
         {
-            // Get all products
+            // Get all products with their Category
             app.MapGet("/products", async (AppDbContext db) =>
             {
-                var products = await db.Products.ToListAsync();
+                var products = await db.Products
+                    .Include(p => p.Category)   // <-- include Category!
+                    .ToListAsync();
+
                 return Results.Ok(products);
             });
 
-            // Get product by ID
+            // Get product by ID with its Category
             app.MapGet("/products/{id}", async (int id, AppDbContext db) =>
             {
-                var product = await db.Products.FindAsync(id);
+                var product = await db.Products
+                    .Include(p => p.Category)   // <-- include Category!
+                    .FirstOrDefaultAsync(p => p.Id == id);
+
                 return product is null ? Results.NotFound() : Results.Ok(product);
             });
 
